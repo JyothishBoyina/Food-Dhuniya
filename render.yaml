@@ -21,15 +21,15 @@ services:
           property: url
 
   # Frontend Service (React / Vite)
-  - type: static
+  - type: web
     name: food-dhuniya-frontend
-    runtime: node
+    runtime: static
     buildCommand: cd frontend && npm install && npm run build
     staticPublishPath: frontend/dist
     envVars:
       - key: VITE_API_URL
         fromService:
-          name: food-dhuniya-backend
           type: web
+          name: food-dhuniya-backend
           property: url
         suffix: /api
