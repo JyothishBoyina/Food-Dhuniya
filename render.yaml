@@ -2,9 +2,7 @@ services:
   # Backend Service (Spring Boot)
   - type: web
     name: food-dhuniya-backend
-    runtime: java
-    buildCommand: ./mvnw clean install -DskipTests
-    startCommand: java -jar target/fooddhuniya-0.0.1-SNAPSHOT.jar
+    env: docker
     envVars:
       - key: DB_URL
         sync: false
@@ -16,9 +14,9 @@ services:
         generateValue: true
       - key: FRONTEND_URL
         fromService:
-          name: food-dhuniya-frontend
           type: static
-          property: url
+          name: food-dhuniya-frontend
+          property: host
 
   # Frontend Service (React / Vite)
   - type: web
@@ -31,5 +29,5 @@ services:
         fromService:
           type: web
           name: food-dhuniya-backend
-          property: url
+          property: host
         suffix: /api
