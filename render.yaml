@@ -17,11 +17,11 @@ services:
       - key: FRONTEND_URL
         fromService:
           name: food-dhuniya-frontend
-          type: static_site
+          type: static
           property: url
 
   # Frontend Service (React / Vite)
-  - type: static_site
+  - type: static
     name: food-dhuniya-frontend
     runtime: node
     buildCommand: cd frontend && npm install && npm run build
