@@ -83,7 +83,20 @@ public class SecurityConfig {
     @Bean
     public org.springframework.web.cors.CorsConfigurationSource corsConfigurationSource() {
         org.springframework.web.cors.CorsConfiguration configuration = new org.springframework.web.cors.CorsConfiguration();
-        configuration.setAllowedOrigins(java.util.Arrays.asList("http://localhost:5173", "http://127.0.0.1:5173", "http://localhost:3000"));
+        
+        // Handle multiple origins including environment variable
+        String frontendUrl = System.getenv("FRONTEND_URL");
+        java.util.List<String> origins = new java.util.ArrayList<>(java.util.Arrays.asList(
+            "http://localhost:5173", 
+            "http://127.0.0.1:5173", 
+            "http://localhost:3000"
+        ));
+        
+        if (frontendUrl != null && !frontendUrl.isEmpty()) {
+            origins.add(frontendUrl);
+        }
+        
+        configuration.setAllowedOrigins(origins);
         configuration.setAllowedMethods(java.util.Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(java.util.Arrays.asList("*"));
         configuration.setAllowCredentials(true);

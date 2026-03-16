@@ -1,0 +1,35 @@
+services:
+  # Backend Service (Spring Boot)
+  - type: web
+    name: food-dhuniya-backend
+    runtime: java
+    buildCommand: ./mvnw clean install -DskipTests
+    startCommand: java -jar target/fooddhuniya-0.0.1-SNAPSHOT.jar
+    envVars:
+      - key: DB_URL
+        sync: false
+      - key: DB_USERNAME
+        sync: false
+      - key: DB_PASSWORD
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true
+      - key: FRONTEND_URL
+        fromService:
+          name: food-dhuniya-frontend
+          type: static_site
+          property: url
+
+  # Frontend Service (React / Vite)
+  - type: static_site
+    name: food-dhuniya-frontend
+    runtime: node
+    buildCommand: cd frontend && npm install && npm run build
+    staticPublishPath: frontend/dist
+    envVars:
+      - key: VITE_API_URL
+        fromService:
+          name: food-dhuniya-backend
+          type: web
+          property: url
+        suffix: /api
